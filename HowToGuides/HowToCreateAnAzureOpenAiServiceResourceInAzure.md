@@ -2,7 +2,7 @@
 
 ## Step 1. How to Create the Resource
 
-- Go to portal.azure.com and log into you Azure Subscription (If you do not have any this guide can )
+- Go to portal.azure.com and log into you Azure Subscription (If you do not have any, use this guide: https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account)
 - Go to "Hamburger Menu" top Left and choose "Create a Resource"
 - In the "Search service and marketplace" search-box type "Azure openai"
 - Choose "Azure OpenAI", click Create > "Azure OpenAI" (you are take to the creation page)
