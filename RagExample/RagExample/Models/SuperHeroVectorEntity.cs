@@ -8,15 +8,15 @@ public class SuperHeroVectorEntity
 {
     [VectorStoreRecordKey]
     public string Id { get; set; }
-    
+
     [VectorStoreRecordData(IsFilterable = true)]
     [TextSearchResultName]
     public string Name { get; set; }
-    
+
     [VectorStoreRecordData(IsFullTextSearchable = true)]
     [TextSearchResultValue]
     public string Description { get; set; }
- 
+
     [VectorStoreRecordVector(Dimensions: 1536, DistanceFunction.CosineSimilarity, IndexKind.Hnsw)]
     public ReadOnlyMemory<float>? DescriptionEmbedding { get; set; }
 

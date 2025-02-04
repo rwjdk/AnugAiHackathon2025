@@ -14,7 +14,7 @@
       "Sex": "Female",
       "Name": "The Caffeinator",
       "Description": "Can brew coffee faster than light, energizing herself and her allies.",
-      "Weakness": "Lack of sleep; if she doesn’t drink coffee for too long, she becomes sluggish.",
+      "Weakness": "Lack of sleep; if she doesnï¿½t drink coffee for too long, she becomes sluggish.",
       "Strenght": "Enhanced speed and agility when caffeinated, can also create coffee shields.",
       "BackgroundStory": "A barista turned hero after discovering she could channel caffeine into superpowers."
     },
@@ -59,7 +59,7 @@
       "Sex": "Male",
       "Name": "The Disco Inferno",
       "Description": "Uses dance moves and disco lights to create dazzling distractions and cause villains to boogie away.",
-      "Weakness": "Can’t perform without music; silence takes away his mojo.",
+      "Weakness": "Canï¿½t perform without music; silence takes away his mojo.",
       "Strenght": "Enthralling dance skills and light manipulation that can blind enemies momentarily.",
       "BackgroundStory": "A former disco DJ who was touched by the spirit of dance during a full moon party."
     },
@@ -97,7 +97,7 @@
       "Description": "Uses a magic stopwatch to pause time, giving him a chance to choose better parenting techniques.",
       "Weakness": "Can only pause time for a limited duration before he must recharge.",
       "Strenght": "Can effectively neutralize threats by freezing them in time temporarily.",
-      "BackgroundStory": "A dad trying to manage life’s chaos after a strange encounter at daycare."
+      "BackgroundStory": "A dad trying to manage lifeï¿½s chaos after a strange encounter at daycare."
     },
     {
       "Id": "12",

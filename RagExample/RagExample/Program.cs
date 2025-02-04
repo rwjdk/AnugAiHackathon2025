@@ -1,16 +1,20 @@
 ﻿//RAG Example
+
 using System.Text;
 using System.Text.Json;
 using Azure;
 using Azure.Search.Documents.Indexes;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Serialization.HybridRow;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.VectorData;
-using Microsoft.SemanticKernel;using Microsoft.SemanticKernel.Agents;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.AzureAISearch;
 using Microsoft.SemanticKernel.Connectors.AzureCosmosDBNoSQL;
-using Microsoft.SemanticKernel.Connectors.AzureOpenAI;using Microsoft.SemanticKernel.Connectors.InMemory;
+using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
+using Microsoft.SemanticKernel.Connectors.InMemory;
 using Microsoft.SemanticKernel.Data;
 using Microsoft.SemanticKernel.Embeddings;
 using RagExample.Models;
@@ -23,15 +27,15 @@ using RagExample.Models;
 var config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
 string azureOpenAiEndpoint = config["AiEndpoint"]!;
 string azureOpenAiKey = config["AiKey"]!;
-string chatModel = "gpt-4o-mini";
-string embeddingModel = "text-embedding-ada-002";
+const string chatModel = "gpt-4o-mini";
+const string embeddingModel = "text-embedding-ada-002";
 string azureSearchEndpoint = config["AiSearchEndpoint"]!;
 string azureSearchKey = config["AiSearchKey"]!;
 string cosmosConnectionString = config["CosmosConnectionString"]!;
 
 //Settings
-VectorStoreToUse vectorStoreToUse = VectorStoreToUse.AzureAiSearch;
-SearchMethod searchMethod = SearchMethod.TextSearch;
+const VectorStoreToUse vectorStoreToUse = VectorStoreToUse.InMemory;
+const SearchMethod searchMethod = SearchMethod.VectorSearch;
 
 //Kernel
 var kernelBuilder = Kernel.CreateBuilder();
@@ -40,8 +44,8 @@ kernelBuilder.AddAzureOpenAITextEmbeddingGeneration(embeddingModel, azureOpenAiE
 var kernel = kernelBuilder.Build();
 var embeddingGenerationService = kernel.GetRequiredService<ITextEmbeddingGenerationService>();
 
-var collection = GetCollection(vectorStoreToUse, azureSearchEndpoint, azureSearchKey, cosmosConnectionString);
-//await AddDataToVectorStore(collection, embeddingGenerationService);
+var collection = GetCollection();
+await AddDataToVectorStore(collection, embeddingGenerationService);
 
 var agent = new ChatCompletionAgent
 {
@@ -58,7 +62,7 @@ while (true)
     string input = Console.ReadLine()!;
     if (!string.IsNullOrWhiteSpace(input))
     {
-        var searchResultData = await RagSearch(input);
+        string[] searchResultData = await RagSearch(input);
         var history = new ChatHistory();
         history.AddUserMessage($"Superheroes what match question: {string.Join($"{Environment.NewLine}***{Environment.NewLine}", searchResultData)}");
         history.AddUserMessage(input);
@@ -123,21 +127,21 @@ async Task AddDataToVectorStore(IVectorStoreRecordCollection<string, SuperHeroVe
     }
 }
 
-IVectorStoreRecordCollection<string, SuperHeroVectorEntity> GetCollection(VectorStoreToUse vectorStoreToUse1, string s, string azureSearchKey1, string cosmosConnectionString1)
+IVectorStoreRecordCollection<string, SuperHeroVectorEntity> GetCollection()
 {
     IVectorStoreRecordCollection<string, SuperHeroVectorEntity> vectorStoreRecordCollection1;
-    switch (vectorStoreToUse1)
+    switch (vectorStoreToUse)
     {
         case VectorStoreToUse.InMemory:
-            var inMemoryVectorStore = new InMemoryVectorStore();
+            InMemoryVectorStore inMemoryVectorStore = new InMemoryVectorStore();
             vectorStoreRecordCollection1 = inMemoryVectorStore.GetCollection<string, SuperHeroVectorEntity>("heroes");
             break;
         case VectorStoreToUse.AzureAiSearch:
-            var azureAiSearchVectorStore = new AzureAISearchVectorStore(new SearchIndexClient(new Uri(s), new AzureKeyCredential(azureSearchKey1)));
+            var azureAiSearchVectorStore = new AzureAISearchVectorStore(new SearchIndexClient(new Uri(azureSearchEndpoint), new AzureKeyCredential(azureSearchKey)));
             vectorStoreRecordCollection1 = azureAiSearchVectorStore.GetCollection<string, SuperHeroVectorEntity>("heroes");
             break;
         case VectorStoreToUse.CosmosDb:
-            var cosmosClient = new CosmosClient(cosmosConnectionString1, new CosmosClientOptions()
+            var cosmosClient = new CosmosClient(cosmosConnectionString, new CosmosClientOptions()
             {
                 // When initializing CosmosClient manually, setting this property is required 
                 // due to limitations in default serializer. 
@@ -164,23 +168,23 @@ async Task<string[]> RagSearch(string input)
     switch (searchMethod)
     {
         case SearchMethod.TextSearch:
-            var textSearch = new VectorStoreTextSearch<SuperHeroVectorEntity>(collection, embeddingGenerationService);
+            VectorStoreTextSearch<SuperHeroVectorEntity> textSearch = new VectorStoreTextSearch<SuperHeroVectorEntity>(collection, embeddingGenerationService);
             KernelSearchResults<TextSearchResult> textResults = await textSearch.GetTextSearchResultsAsync(input, new() { Top = 5 });
             await foreach (TextSearchResult result in textResults.Results)
             {
                 searchResults.Add(result.Value);
             }
+
             break;
         case SearchMethod.VectorSearch:
             var searchVector = await embeddingGenerationService.GenerateEmbeddingAsync(input);
             var searchResult = await collection.VectorizedSearchAsync(searchVector, new() { Top = 5 });
 
-            // Inspect the returned hotel.
             await foreach (var record in searchResult.Results.Where(x => x.Score > 0.7))
             {
-                Console.WriteLine("Found Hero: " + record.Record.Description);
-                Console.WriteLine("Found record score: " + record.Score);
+                searchResults.Add(record.Record.Description);
             }
+
             break;
         default:
             throw new ArgumentOutOfRangeException();
