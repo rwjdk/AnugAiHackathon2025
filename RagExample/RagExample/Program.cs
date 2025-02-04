@@ -129,16 +129,16 @@ async Task AddDataToVectorStore(IVectorStoreRecordCollection<string, SuperHeroVe
 
 IVectorStoreRecordCollection<string, SuperHeroVectorEntity> GetCollection()
 {
-    IVectorStoreRecordCollection<string, SuperHeroVectorEntity> vectorStoreRecordCollection1;
+    IVectorStoreRecordCollection<string, SuperHeroVectorEntity> vectorStoreRecordCollection;
     switch (vectorStoreToUse)
     {
         case VectorStoreToUse.InMemory:
             InMemoryVectorStore inMemoryVectorStore = new InMemoryVectorStore();
-            vectorStoreRecordCollection1 = inMemoryVectorStore.GetCollection<string, SuperHeroVectorEntity>("heroes");
+            vectorStoreRecordCollection = inMemoryVectorStore.GetCollection<string, SuperHeroVectorEntity>("heroes");
             break;
         case VectorStoreToUse.AzureAiSearch:
             var azureAiSearchVectorStore = new AzureAISearchVectorStore(new SearchIndexClient(new Uri(azureSearchEndpoint), new AzureKeyCredential(azureSearchKey)));
-            vectorStoreRecordCollection1 = azureAiSearchVectorStore.GetCollection<string, SuperHeroVectorEntity>("heroes");
+            vectorStoreRecordCollection = azureAiSearchVectorStore.GetCollection<string, SuperHeroVectorEntity>("heroes");
             break;
         case VectorStoreToUse.CosmosDb:
             var cosmosClient = new CosmosClient(cosmosConnectionString, new CosmosClientOptions()
@@ -149,7 +149,7 @@ IVectorStoreRecordCollection<string, SuperHeroVectorEntity> GetCollection()
             });
             var jsonSerializerOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseUpper };
             var database = cosmosClient.GetDatabase("data");
-            vectorStoreRecordCollection1 = new AzureCosmosDBNoSQLVectorStoreRecordCollection<SuperHeroVectorEntity>(database, "heroes", new()
+            vectorStoreRecordCollection = new AzureCosmosDBNoSQLVectorStoreRecordCollection<SuperHeroVectorEntity>(database, "heroes", new()
             {
                 PartitionKeyPropertyName = nameof(SuperHeroVectorEntity.Id),
                 JsonSerializerOptions = jsonSerializerOptions
@@ -159,7 +159,7 @@ IVectorStoreRecordCollection<string, SuperHeroVectorEntity> GetCollection()
             throw new ArgumentOutOfRangeException();
     }
 
-    return vectorStoreRecordCollection1;
+    return vectorStoreRecordCollection;
 }
 
 async Task<string[]> RagSearch(string input)
