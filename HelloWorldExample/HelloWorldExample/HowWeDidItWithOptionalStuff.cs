@@ -24,19 +24,16 @@ public static class HowWeDidItWithOptionalStuff
         var kernelBuilder = Kernel.CreateBuilder();
         kernelBuilder.AddAzureOpenAIChatCompletion(chatModel, azureOpenAiEndpoint, azureOpenAiKey);
         var kernel = kernelBuilder.Build();
-
         var agent = new ChatCompletionAgent
         {
             Kernel = kernel,
-            Name = "FriendlyAI", //Warning name can't contain spaces
+            Name = "FriendlyAI", //Optional: Not that it really do anything. Warning name can't contain spaces
             Instructions = "You are a friendly AI, helping the user to answer questions",
 
             //Optional
             Arguments = new KernelArguments(new AzureOpenAIPromptExecutionSettings
             {
                 Temperature = 1, //Control how creative the model is (Between 0 and 2, Default is 1)
-                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(), //This enable Function Calling (Not that we have any at the moment)
-                //ResponseFormat = typeof(<someobject>), //This enables structured output (see separate example of that)
             }),
             HistoryReducer = new ChatHistoryTruncationReducer(3) //Will ensure the Chat-history to always be max 3 
         };

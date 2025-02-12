@@ -34,8 +34,7 @@ string azureSearchKey = config["AiSearchKey"]!;
 string cosmosConnectionString = config["CosmosConnectionString"]!;
 
 //Settings
-const VectorStoreToUse vectorStoreToUse = VectorStoreToUse.InMemory;
-const SearchMethod searchMethod = SearchMethod.VectorSearch;
+const VectorStoreToUse vectorStoreToUse = VectorStoreToUse.CosmosDb;
 
 //Kernel
 var kernelBuilder = Kernel.CreateBuilder();
@@ -52,7 +51,7 @@ var agent = new ChatCompletionAgent
     Kernel = kernel,
     Name = "ComicBookNerd",
     Instructions = "You are a comic book nerd, that answer answer questions about Super Heroes." +
-                   "DOT NOT USE YOUR GENERAL KNOWLEDGE. ONLY THE SUPERHEROES I GIVE YOU!"
+                   "DO NOT USE YOUR GENERAL KNOWLEDGE. ONLY THE SUPERHEROES I GIVE YOU!"
 };
 
 Console.OutputEncoding = Encoding.UTF8;
@@ -120,6 +119,7 @@ async Task AddDataToVectorStore(IVectorStoreRecordCollection<string, SuperHeroVe
         await vectorStoreRecordCollection.UpsertAsync(new SuperHeroVectorEntity
         {
             Id = superHero.Id,
+            Sex = superHero.Sex,
             Name = superHero.Name,
             Description = description.ToString(),
             DescriptionEmbedding = vector
@@ -165,29 +165,17 @@ IVectorStoreRecordCollection<string, SuperHeroVectorEntity> GetCollection()
 async Task<string[]> RagSearch(string input)
 {
     List<string> searchResults = new List<string>();
-    switch (searchMethod)
+    ReadOnlyMemory<float> searchVector = await embeddingGenerationService.GenerateEmbeddingAsync(input);
+    var searchResult = await collection.VectorizedSearchAsync(searchVector, new()
     {
-        case SearchMethod.TextSearch:
-            VectorStoreTextSearch<SuperHeroVectorEntity> textSearch = new VectorStoreTextSearch<SuperHeroVectorEntity>(collection, embeddingGenerationService);
-            KernelSearchResults<TextSearchResult> textResults = await textSearch.GetTextSearchResultsAsync(input, new() { Top = 5 });
-            await foreach (TextSearchResult result in textResults.Results)
-            {
-                searchResults.Add(result.Value);
-            }
+        //Filter = new VectorSearchFilter([new EqualToFilterClause(nameof(SuperHeroVectorEntity.Sex), "Female")]),
+        //VectorPropertyName = nameof(SuperHeroVectorEntity.DescriptionEmbedding),
+        Top = 5
+    });
 
-            break;
-        case SearchMethod.VectorSearch:
-            var searchVector = await embeddingGenerationService.GenerateEmbeddingAsync(input);
-            var searchResult = await collection.VectorizedSearchAsync(searchVector, new() { Top = 5 });
-
-            await foreach (var record in searchResult.Results.Where(x => x.Score > 0.7))
-            {
-                searchResults.Add(record.Record.Description);
-            }
-
-            break;
-        default:
-            throw new ArgumentOutOfRangeException();
+    await foreach (var record in searchResult.Results.Where(x => x.Score > 0.7))
+    {
+        searchResults.Add(record.Record.Description);
     }
 
     return searchResults.ToArray();

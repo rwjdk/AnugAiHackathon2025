@@ -26,7 +26,7 @@ public static class StructuredOutputExample
         var kernelBuilder = Kernel.CreateBuilder();
         kernelBuilder.AddAzureOpenAIChatCompletion(chatModel, azureOpenAiEndpoint, azureOpenAiKey);
         var kernel = kernelBuilder.Build();
-        
+
         var agent = new ChatCompletionAgent
         {
             Kernel = kernel,

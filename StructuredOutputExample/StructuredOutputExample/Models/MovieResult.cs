@@ -6,6 +6,9 @@ public class MovieResult
 {
     public required string MessageBack { get; set; }
 
+    //[Description("The average score each movie have in the Top10Movies")]
+    //public required decimal AverageScoreOfTheMovies { get; set; }
+
     [Description("Order them by IMDB Score")] //Sometimes the Structured output properties need a bit of description to get desired effect
     public required Movie[] Top10Movies { get; set; }
 
