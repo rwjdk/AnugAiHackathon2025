@@ -2,11 +2,7 @@
 using Azure.AI.OpenAI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.ComponentModel;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Schema;
 using ChatMessage = Microsoft.Extensions.AI.ChatMessage;
 
 var config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
