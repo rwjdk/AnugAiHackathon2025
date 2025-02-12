@@ -26,11 +26,6 @@ public static class HowWeDidIt
         kernelBuilder.AddAzureOpenAIChatCompletion(chatModel, azureOpenAiEndpoint, azureOpenAiKey);
         var kernel = kernelBuilder.Build();
 
-
-        var answerBack = await kernel.InvokePromptAsync("Hi AI. Please Introduce yourself"); //Simple way to interact with Semantic Kernel. Agent below is the recommended way for more options
-        Console.WriteLine(answerBack);
-        Console.WriteLine();
-
         var agent = new ChatCompletionAgent
         {
             Kernel = kernel,
