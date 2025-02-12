@@ -13,7 +13,6 @@ public static class HowWeDidIt
     public static async Task Run()
     {
 #pragma warning disable SKEXP0001
-#pragma warning disable SKEXP0010
 #pragma warning disable SKEXP0110
 
         //Configuration
@@ -29,8 +28,7 @@ public static class HowWeDidIt
         var agent = new ChatCompletionAgent
         {
             Kernel = kernel,
-            Name = "FriendlyAI", //Warning name can't contain spaces
-            Instructions = "You are a friendly AI, helping the user to answer questions",
+            Instructions = "You are a friendly AI, helping the user to answer questions", //Give it some personality
         };
 
         var chatHistory = new ChatHistory();
@@ -38,7 +36,7 @@ public static class HowWeDidIt
         {
             Console.Write("> ");
             var inputFromUser = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(inputFromUser))
+            if (!string.IsNullOrWhiteSpace(inputFromUser)) //Ignore if no user input
             {
                 chatHistory.AddUserMessage(inputFromUser);
                 await foreach (var response in agent.InvokeStreamingAsync(chatHistory))

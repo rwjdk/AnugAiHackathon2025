@@ -30,7 +30,7 @@ public static class DoItYourself
 
         #region Step 4
 
-        //- Create a ChatCompletionAgent instance, give it a name, bind it to the kernel and give it instructions (Developer Message)
+        //- Create a ChatCompletionAgent instance, give it a name, bind it to the kernel and give it instructions (Developer/System Message)
 
         #endregion
 
@@ -44,7 +44,7 @@ public static class DoItYourself
 
         //Let's build a Chat-while(true) loop where is question the agent and let make the answer streaming so it feel more alive
         //- Ask for input and add that to history as a user-message
-        //- Invoke the agent (A bit of a "funky" syntax if you are not used to iAsyncEnumerable)
+        //- Invoke the agent (A bit of a "funky" syntax if you are not used to IAsyncEnumerable)
         //- Iterate the response-content
         //- Tip: Console.OutputEncoding = Encoding.UTF8; to get Emoji to work
 

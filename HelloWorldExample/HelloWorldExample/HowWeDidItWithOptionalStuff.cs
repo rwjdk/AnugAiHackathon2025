@@ -13,7 +13,6 @@ public static class HowWeDidItWithOptionalStuff
     public static async Task Run()
     {
 #pragma warning disable SKEXP0001
-#pragma warning disable SKEXP0010
 #pragma warning disable SKEXP0110
 
         //Configuration
