@@ -40,7 +40,6 @@ public static class HowWeDidItWithOptionalStuff
                 //ResponseFormat = typeof(<someobject>), //This enables structured output (see separate example of that)
             }),
             HistoryReducer = new ChatHistoryTruncationReducer(3) //Will ensure the Chat-history to always be max 3 
-
         };
 
         var chatHistory = new ChatHistory();

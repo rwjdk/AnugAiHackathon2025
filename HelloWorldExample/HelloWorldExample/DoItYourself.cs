@@ -6,7 +6,7 @@ public static class DoItYourself
     {
         #region Step 1
 
-        //Install Nuget: Microsoft.SemanticKernel
+        //Install Nuget: Microsoft.SemanticKernel + Microsoft.SemanticKernel.Agents.Core  (NB: It is a pre-release package so need to be turned on)
 
         #endregion
 
@@ -28,31 +28,19 @@ public static class DoItYourself
 
         #endregion
 
-        #region Step 4 (First AI Result back)
+        #region Step 4
 
-        //Make first raw call directly on the kernel
-        //- Ask for a Question
-        //- kernel.InvokePromptAsync
-        //- Write the Answer
+        //- Create a ChatCompletionAgent instance, give it a name, bind it to the kernel and give it instructions (Developer Message)
 
         #endregion
 
         #region Step 5
 
-        //Let's introduce an agent so things become easier
-        //- Install one more Nuget: Microsoft.SemanticKernel.Agents.Core  (NB: It is a pre-release package so need to be turned on)
-        //- Create a ChatCompletionAgent instance, give it a name and bind it to the kernel
-        //- Choose the Agents Instructions
+        //Create a ChatHistory Object
 
         #endregion
 
         #region Step 6
-
-        //Let's introduce the ChatHistory Object
-
-        #endregion
-
-        #region Step 7
 
         //Let's build a Chat-while(true) loop where is question the agent and let make the answer streaming so it feel more alive
         //- Ask for input and add that to history as a user-message
@@ -62,5 +50,4 @@ public static class DoItYourself
 
         #endregion
     }
-
 }
