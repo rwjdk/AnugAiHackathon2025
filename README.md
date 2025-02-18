@@ -9,6 +9,8 @@ Sample Repo for ANUG AI Hackathon 22nd of Feb 2025
  - For RAG
    - [How to Create an Azure Search Service Resource in Azure](https://github.com/rwjdk/AnugAiHackathon2025/blob/main/HowToGuides/HowToCreateAnAzureSearchResourceInAzure.md#how-to-create-an-azure-search-service-resource-in-azure)
    - [How to Create a CosmosDB Service Resource in Azure](https://github.com/rwjdk/AnugAiHackathon2025/blob/main/HowToGuides/HowToCreateACosmosDbResourceInAzure.md)
+- For Offline Usage
+  - [How to install and run Ollama](https://github.com/rwjdk/AnugAiHackathon2025/blob/main/HowToGuides/HowToInstallAndRunOllama.md)
 
 # Links
 - [Semantic Kernel Docs](https://learn.microsoft.com/en-us/semantic-kernel/overview/)
