@@ -15,7 +15,15 @@ public class ShoppingListPlugin
 
         string json = File.ReadAllText(GetFilePath());
 
-        return JsonSerializer.Deserialize<ShoppingList>(json);
+        ShoppingList? shoppingList = JsonSerializer.Deserialize<ShoppingList>(json);
+
+        var orderedShoppinglist = new ShoppingList()
+        {
+            Ingredients = shoppingList.Ingredients.OrderBy(ingredient => ingredient.IngredientName).ToList(),
+            IngredientsToIgnore = shoppingList.IngredientsToIgnore.OrderBy(ingredient => ingredient.IngredientName).ToList()
+        };
+
+        return orderedShoppinglist;
     }
 
     private void SaveShoppingList(ShoppingList shoppingList)
