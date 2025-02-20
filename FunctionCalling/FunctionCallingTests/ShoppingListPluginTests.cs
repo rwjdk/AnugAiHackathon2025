@@ -16,7 +16,7 @@ public class ShoppingListPluginTests
     }
 
     [Fact]
-    public async Task Allrecipes()
+    public async Task AllRecipes()
     {
         var httpPlugin = new HttpPlugin();
 
