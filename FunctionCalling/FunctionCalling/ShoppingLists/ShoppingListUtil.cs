@@ -24,7 +24,8 @@ namespace FunctionCalling.ShoppingLists
             const string chatModel = "gpt-4o-mini";
             //const string chatModel = "gpt-4o";
             //const string chatModel = "o3-mini";
-
+            
+            
             IKernelBuilder kernelBuilder = Kernel.CreateBuilder();
             kernelBuilder.Services.AddSingleton<IAutoFunctionInvocationFilter, FunctionCallingFilter>();
 

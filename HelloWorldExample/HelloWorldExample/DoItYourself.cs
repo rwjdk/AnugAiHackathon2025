@@ -18,7 +18,7 @@ public static class DoItYourself
         //- Deploy a Model via Azure Open AI Studio
         const string azureOpenAiEndpoint = "";
         const string azureOpenAiApiKey = ""; //Todo - Should not be directly in real code!!! 
-        const string modelDeploymentName = "";
+        const string modelDeploymentName = "gpt-4o-mini";
 
         #endregion
 

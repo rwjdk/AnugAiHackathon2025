@@ -32,9 +32,9 @@ public static class NoStructuredOutput
 
         var chatHistory = new ChatHistory();
         chatHistory.AddUserMessage("What are the top 10 Movies according to IMDB?");
-        await foreach (var response in agent.InvokeAsync(chatHistory))
+        await foreach (var response in agent.InvokeStreamingAsync(chatHistory))
         {
-            Console.WriteLine(response.Content);
+            Console.Write(response.Content);
         }
     }
 }
