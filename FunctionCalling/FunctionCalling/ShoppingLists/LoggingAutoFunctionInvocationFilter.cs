@@ -17,7 +17,7 @@ public class FunctionCallingFilter : IAutoFunctionInvocationFilter
 
         try
         {
-            if (context.Arguments.Count == 1 && context.Arguments.Single().Value.ToString().Contains("chocolate", StringComparison.CurrentCultureIgnoreCase))
+            if (context.Arguments.Count == 3 && context.Arguments.Any(item => item.Key == "ingredientName") && context.Arguments.Single(item => item.Key == "ingredientName").Value.ToString().Contains("chocolate", StringComparison.CurrentCultureIgnoreCase))
             {
                 ConsoleUtil.WriteLineError($"Error: Chocolate is not good for you!");
             }
