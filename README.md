@@ -2,7 +2,7 @@
 > As AI is an ever-evolving tech, most of this repo's samples are outdated. To get up-to-date examples of the various concepts, see my [AI Samples Repo](https://github.com/rwjdk/AiSamples)
 
 # ANUG AI Hackathon 2025
-Sample Repo for ANUG AI Hackathon 22nd of Feb 2025
+Sample Repo for ANUG AI Hackathon 22nd of Feb 2025.
 
 [Slides](https://1drv.ms/p/s!AkItAZiaMtwzkLsoohjX5eUy3XsUSw)
 
